@@ -36,9 +36,13 @@ export const unit = {
   launched: { bn: "১ অক্টোবর ২০২৬", en: "1 October 2026" },
   personnel: { bn: "৪,৫৯২", en: "4,592" },
   chief: {
-    name: { bn: "মো. ইকবাল হোসেন", en: "Md. Iqbal Hossain" },
+    name: { bn: "মোঃ ইকবাল হোসেন", en: "Md. Iqbal Hossain" },
     rank: { bn: "অতিরিক্ত আইজিপি", en: "Additional IGP" },
     role: { bn: "ইউনিট প্রধান", en: "Head of Unit" },
+    photo: "/images/unit-chief.png",
+    email: "addligau_i@police.gov.bd",
+    office: { bn: "০২-৪৭১২১৭২১", en: "02-47121721", tel: "+8802 47121721" },
+    mobile: { bn: "০১৩২০০০০০০৮", en: "01320000008", tel: "+8801320000008" },
   },
   address: { bn: "পুলিশ সদর দপ্তর, ঢাকা", en: "Police Headquarters, Dhaka" },
 };

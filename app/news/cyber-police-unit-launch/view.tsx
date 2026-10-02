@@ -54,7 +54,7 @@ export default function ArticleView() {
             <h2>{t("এক নজরে", "At a glance")}</h2>
             <dl>
               <div><dt>{t("উদ্বোধক", "Inaugurated by")}</dt><dd>{t("স্বরাষ্ট্রমন্ত্রী সালাহউদ্দিন আহমদ", "Home Minister Salahuddin Ahmed")}</dd></div>
-              <div><dt>{t("ইউনিট প্রধান", "Head of unit")}</dt><dd>{t("অতিরিক্ত আইজিপি মো. ইকবাল হোসেন", "Additional IGP Md. Iqbal Hossain")}</dd></div>
+              <div><dt>{t("ইউনিট প্রধান", "Head of unit")}</dt><dd>{t("অতিরিক্ত আইজিপি মোঃ ইকবাল হোসেন", "Additional IGP Md. Iqbal Hossain")}</dd></div>
               <div><dt>{t("মোট জনবল", "Personnel")}</dt><dd>{t("৪,৫৯২ জন", "4,592")}</dd></div>
               <div><dt>{t("ভেন্যু", "Venue")}</dt><dd>{t("হল অব ইন্টেগ্রিটি, পুলিশ সদর দপ্তর", "Hall of Integrity, Police HQ")}</dd></div>
             </dl>

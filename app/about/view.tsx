@@ -1,6 +1,7 @@
 "use client";
 
-import { Award, BookOpen, FlaskConical, GraduationCap, Network, ShieldCheck, Target, UserCheck } from "lucide-react";
+import { Award, BookOpen, FlaskConical, GraduationCap, Mail, Network, Phone, ShieldCheck, Smartphone, Target, UserCheck } from "lucide-react";
+import Image from "next/image";
 import { PageBanner } from "../components/PageBanner";
 import { structure, unit } from "../components/content";
 import { useSite } from "../components/SiteProvider";
@@ -61,15 +62,21 @@ export default function AboutView() {
       <section className="section-tint">
         <div className="section page-wrap leader-layout">
           <div className="leader-card">
-            <span className="leader-avatar" aria-hidden="true"><ShieldCheck size={40} /></span>
-            <p className="eyebrow">{t(unit.chief.role.bn, unit.chief.role.en)}</p>
-            <h2>{t(unit.chief.name.bn, unit.chief.name.en)}</h2>
-            <p className="leader-rank">{t(unit.chief.rank.bn, unit.chief.rank.en)}</p>
+            <Image className="leader-photo" src={unit.chief.photo} alt={t(unit.chief.name.bn, unit.chief.name.en)} width={283} height={311} priority />
+            <div className="leader-body">
+              <h2>{t(unit.chief.name.bn, unit.chief.name.en)}</h2>
+              <p className="leader-rank">{t(unit.chief.rank.bn, unit.chief.rank.en)} ({t(unit.chief.role.bn, unit.chief.role.en)})</p>
+              <dl className="leader-contact">
+                <div><dt><Mail size={15} />{t("ইমেইল", "Email")}</dt><dd><a href={`mailto:${unit.chief.email}`}>{unit.chief.email}</a></dd></div>
+                <div><dt><Phone size={15} />{t("ফোন (অফিস)", "Phone (office)")}</dt><dd><a href={`tel:${unit.chief.office.tel}`}>{t(unit.chief.office.bn, unit.chief.office.en)}</a></dd></div>
+                <div><dt><Smartphone size={15} />{t("মোবাইল", "Mobile")}</dt><dd><a href={`tel:${unit.chief.mobile.tel}`}>{t(unit.chief.mobile.bn, unit.chief.mobile.en)}</a></dd></div>
+              </dl>
+            </div>
           </div>
           <div className="leader-text">
             <p className="eyebrow">{t("নেতৃত্ব", "LEADERSHIP")}</p>
             <h2>{t("একজন অতিরিক্ত আইজিপি-র নেতৃত্বে পরিচালিত", "Led by an Additional Inspector General")}</h2>
-            <p>{t("সাইবার পুলিশ ইউনিট একজন অতিরিক্ত আইজিপি-র নেতৃত্বে পরিচালিত হয়। প্রাথমিকভাবে অতিরিক্ত আইজিপি মো. ইকবাল হোসেনকে এ ইউনিটের দায়িত্ব প্রদান করে আনুষ্ঠানিকভাবে কার্যক্রম শুরু করা হয়েছে।", "The Cyber Police Unit is led by an Additional IGP. Operations formally began with Additional IGP Md. Iqbal Hossain appointed to lead the unit.")}</p>
+            <p>{t("সাইবার পুলিশ ইউনিট একজন অতিরিক্ত আইজিপি-র নেতৃত্বে পরিচালিত হয়। প্রাথমিকভাবে অতিরিক্ত আইজিপি মোঃ ইকবাল হোসেনকে এ ইউনিটের দায়িত্ব প্রদান করে আনুষ্ঠানিকভাবে কার্যক্রম শুরু করা হয়েছে।", "The Cyber Police Unit is led by an Additional IGP. Operations formally began with Additional IGP Md. Iqbal Hossain appointed to lead the unit.")}</p>
           </div>
         </div>
       </section>

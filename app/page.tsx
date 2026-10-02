@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, Ban, Calendar, FileText, FlaskConical, Phone, ScanSearch, Search, ShieldCheck, Users } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { commonScams, emergencyLines, policeNever } from "./components/bd-context";
 import { launchArticle, mandate, specialists, structure, unit } from "./components/content";
@@ -34,7 +35,7 @@ export default function Home() {
             <p className="launch-figure">{t(unit.personnel.bn, unit.personnel.en)}</p>
             <p className="launch-caption">{t("অনুমোদিত অর্গানোগ্রাম অনুযায়ী মোট জনবল", "Total personnel under the approved organogram")}</p>
             <div className="launch-chief">
-              <span className="chief-mark"><ShieldCheck size={20} /></span>
+              <Image className="chief-photo" src={unit.chief.photo} alt="" width={48} height={48} />
               <div><small>{t(unit.chief.role.bn, unit.chief.role.en)}</small><strong>{t(unit.chief.rank.bn, unit.chief.rank.en)} {t(unit.chief.name.bn, unit.chief.name.en)}</strong></div>
             </div>
           </aside>
