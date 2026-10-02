@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>সাইবার পুলিশ ইউনিট — নাগরিক তথ্য প্রোটোটাইপ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Tiro+Bangla&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5FA; --surface:#FFFFFF; --surface-2:#E9EEF6; --ink:#13213A; --muted:#55637C; --line:#D5DDEA;
+  --navy:#0D1E3A; --navy-2:#132B52; --cyan:#1A86B8; --cyan-soft:#D8EEF8; --gold:#B98A2F;
+  --risk:#C2302C; --risk-soft:#FBE4E2; --warn:#B26A00; --warn-soft:#FDF0D9; --ok:#1C7A54; --ok-soft:#DDF2E8;
+  --hero-ink:#EAF2FB; --hero-muted:#9DB3D3; --beam:#4FC3EE;
+  --sans:"Hind Siliguri",system-ui,"Noto Sans Bengali",sans-serif;
+  --serif:"Tiro Bangla","Noto Serif Bengali",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#081325; --surface:#0F1F3B; --surface-2:#152a4d; --ink:#E5ECF6; --muted:#9AAAC3; --line:#22375C;
+    --cyan:#4FC3EE; --cyan-soft:#12344f; --gold:#D6A74C;
+    --risk:#F07A72; --risk-soft:#3a1a22; --warn:#F2B455; --warn-soft:#3a2a12; --ok:#5ACB95; --ok-soft:#123a2c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#081325; --surface:#0F1F3B; --surface-2:#152a4d; --ink:#E5ECF6; --muted:#9AAAC3; --line:#22375C;
+  --cyan:#4FC3EE; --cyan-soft:#12344f; --gold:#D6A74C;
+  --risk:#F07A72; --risk-soft:#3a1a22; --warn:#F2B455; --warn-soft:#3a2a12; --ok:#5ACB95; --ok-soft:#123a2c;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+html[lang="en"] .bn{display:none} html[lang="bn"] .en{display:none}
+img,svg{max-width:100%}
+a{color:var(--cyan)}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--beam);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--mono)}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--navy);color:var(--hero-ink);border-bottom:1px solid #1d3762}
+.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;font-weight:700;line-height:1.15}
+.brand small{display:block;font-weight:400;color:var(--hero-muted);font-size:13px}
+nav.links{display:flex;gap:4px;margin-left:auto}
+nav.links a{color:var(--hero-muted);text-decoration:none;padding:8px 10px;border-radius:8px;font-size:15px}
+nav.links a:hover{color:#fff;background:#18325c}
+.tog{display:flex;gap:6px}
+.tog button{background:#18325c;border:1px solid #27467a;color:var(--hero-ink);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:14px;min-width:40px}
+.tog button:hover{border-color:var(--beam)}
+@media (max-width:860px){nav.links{display:none}.tog{margin-left:auto}}
+
+/* hero */
+.hero{background:
+  linear-gradient(transparent 0 calc(100% - 1px),rgba(79,195,238,.07) 0) 0 0/100% 32px,
+  linear-gradient(90deg,transparent 0 calc(100% - 1px),rgba(79,195,238,.07) 0) 0 0/32px 100%,
+  radial-gradient(ellipse at 80% 0%,#1b3d70 0%,var(--navy) 60%);
+  color:var(--hero-ink);padding:56px 0 64px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:start}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+.prototype-notice{grid-column:1/-1;background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--gold);padding:12px 16px;font-size:15px;line-height:1.5}
+.prototype-notice b{display:block;color:var(--ink);font-weight:600}
+.prototype-notice span{color:var(--muted)}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,54px);line-height:1.2;margin:0 0 18px;letter-spacing:-.005em}
+html[lang="en"] .hero h1{font-family:var(--sans);font-weight:700;line-height:1.1}
+.hero p.lede{color:var(--hero-muted);font-size:18px;max-width:34ch;margin:0 0 26px}
+.unit-tag{display:inline-flex;align-items:center;gap:8px;color:var(--gold);font-weight:600;font-size:15px;margin-bottom:18px}
+.unit-tag::before{content:"";width:22px;height:2px;background:var(--gold)}
+.hero-facts{display:flex;gap:28px;flex-wrap:wrap;border-top:1px solid #23406e;padding-top:18px}
+.hero-facts div{font-size:14px;color:var(--hero-muted)}
+.hero-facts b{display:block;color:#fff;font-size:22px;font-weight:600}
+
+/* scanner */
+.scanner{background:#0a1830;border:1px solid #23406e;border-radius:16px;padding:20px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.scanner label.lbl{display:block;font-weight:600;margin-bottom:8px}
+.scan-field{position:relative;border-radius:12px;overflow:hidden}
+.scanner textarea{width:100%;min-height:150px;resize:vertical;background:#0f2242;border:1px solid #2a4a7f;border-radius:12px;padding:14px 16px;color:#EAF2FB;line-height:1.6;font-size:16px}
+.scanner textarea::placeholder{color:#6f87ad}
+.scanner textarea:focus{outline:none;border-color:var(--beam)}
+.scan-field.scanning::after{content:"";position:absolute;left:0;right:0;height:46px;top:-46px;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(79,195,238,.35) 80%,var(--beam));
+  animation:beam 1.1s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes beam{to{top:100%}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px;align-items:center}
+.chips span.hint{color:#7f97bd;font-size:14px;margin-right:2px}
+.chip{background:transparent;border:1px solid #2f5288;color:#BCD3EE;border-radius:999px;padding:4px 12px;font-size:14px;cursor:pointer}
+.chip:hover{border-color:var(--beam);color:#fff}
+.scan-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:11px 20px;font-weight:600;cursor:pointer;text-decoration:none;font-size:16px}
+.btn-beam{background:var(--beam);color:#06203a}
+.btn-beam:hover{background:#7ad4f3}
+.btn-ghost{background:transparent;color:inherit;border:1px solid currentColor;opacity:.85}
+.btn-ghost:hover{opacity:1}
+.btn-primary{background:var(--navy);color:#fff}
+:root[data-theme="dark"] .btn-primary{background:var(--cyan);color:#06203a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-primary{background:var(--cyan);color:#06203a}}
+.btn-risk{background:var(--risk);color:#fff}
+.privacy{font-size:13px;color:#7f97bd;margin-left:auto}
+
+.result{margin-top:18px;border-top:1px dashed #2a4a7f;padding-top:18px;display:none}
+.result.show{display:block}
+.verdict{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.verdict h3{margin:0;font-size:20px}
+.verdict .score{font-family:var(--mono);font-size:28px;font-weight:700;min-width:62px}
+.meter{height:10px;border-radius:99px;background:linear-gradient(90deg,#2b9a6f 0 30%,#e2a33b 30% 60%,#e0564f 60%);position:relative;margin:4px 0 18px;opacity:.9}
+.meter i{position:absolute;top:-5px;width:4px;height:20px;background:#fff;border-radius:2px;left:0;transition:left .9s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 0 3px #0a1830}
+.marked{background:#0f2242;border-radius:10px;padding:12px 14px;white-space:pre-wrap;word-break:break-word;color:#cfe0f5;font-size:15px;max-height:180px;overflow:auto}
+.marked mark{background:rgba(224,86,79,.28);color:#fff;border-bottom:2px solid #e0564f;border-radius:3px;padding:0 2px}
+.flags{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
+.flags li{border-left:3px solid #e0564f;padding:2px 0 2px 12px}
+.flags li b{display:block;color:#fff;font-weight:600}
+.flags li span{color:#9DB3D3;font-size:15px}
+.flags li.minor{border-color:#e2a33b}
+.next-steps{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+
+/* sections */
+section.band{padding:72px 0}
+section.band + section.band{border-top:1px solid var(--line)}
+.sec-head{max-width:640px;margin-bottom:32px}
+.sec-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.6vw,38px);line-height:1.25;margin:0 0 10px}
+html[lang="en"] .sec-head h2{font-family:var(--sans);font-weight:700;line-height:1.15}
+.sec-head p{color:var(--muted);margin:0}
+
+/* golden hour */
+.hour{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.hour li{list-style:none;padding:22px 20px;border-right:1px solid var(--line);position:relative}
+.hour li:last-child{border-right:0}
+.hour li::before{counter-increment:s;content:counter(s);font-family:var(--mono);font-weight:700;color:var(--gold);font-size:14px;display:block;margin-bottom:8px}
+html[lang="bn"] .hour li::before{content:counter(s,bengali)}
+.hour h3{margin:0 0 6px;font-size:18px;line-height:1.35}
+.hour p{margin:0;color:var(--muted);font-size:15px}
+.hour-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px}
+.call999{display:inline-flex;align-items:center;gap:12px;background:var(--risk);color:#fff;text-decoration:none;border-radius:12px;padding:10px 18px 10px 12px;font-weight:600}
+.call999 b{font-family:var(--mono);font-size:24px;background:rgba(255,255,255,.18);border-radius:8px;padding:0 10px}
+@media (max-width:860px){.hour{grid-template-columns:1fr 1fr}.hour li:nth-child(2){border-right:0}.hour li:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media (max-width:520px){.hour{grid-template-columns:1fr}.hour li{border-right:0;border-bottom:1px solid var(--line)}.hour li:last-child{border-bottom:0}}
+
+/* report */
+.report-grid{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:28px;align-items:start}
+@media (max-width:900px){.report-grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+.stepper{display:flex;gap:6px;margin:0 0 22px;padding:0;list-style:none}
+.stepper li{flex:1;font-size:14px;color:var(--muted);padding-top:10px;border-top:4px solid var(--line)}
+.stepper li.on{color:var(--ink);border-color:var(--cyan);font-weight:600}
+.stepper li.done{border-color:var(--cyan);color:var(--muted)}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.cat{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;line-height:1.35}
+.cat b{display:block;font-weight:600;margin-bottom:2px}
+.cat small{color:var(--muted);font-size:14px}
+.cat:hover{border-color:var(--cyan)}
+.cat[aria-pressed="true"]{border-color:var(--cyan);background:var(--cyan-soft)}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:600;margin-bottom:6px;font-size:15px}
+.field .help{font-size:14px;color:var(--muted);margin-top:4px}
+.field input,.field textarea,.field select{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--cyan)}
+.field textarea{min-height:120px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+.checks{display:grid;gap:8px}
+.checks label{display:flex;gap:10px;align-items:flex-start;font-weight:400;cursor:pointer}
+.checks input{width:18px;height:18px;margin-top:4px;accent-color:var(--cyan)}
+.wiz-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
+.err{color:var(--risk);font-size:15px;margin:10px 0 0;min-height:1em}
+.receipt{text-align:left}
+.docket{font-family:var(--mono);font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:.02em;background:var(--surface-2);border:1px dashed var(--gold);border-radius:10px;padding:12px 16px;display:inline-block;margin:8px 0 14px}
+.receipt dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:0 0 18px;font-size:15px}
+.receipt dt{color:var(--muted)} .receipt dd{margin:0}
+
+.track h3{margin:0 0 6px;font-size:19px}
+.track p{color:var(--muted);font-size:15px;margin:0 0 14px}
+.track form{display:flex;gap:8px}
+.track input{flex:1;min-width:0;font-family:var(--mono);font-size:14px;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px}
+.timeline{list-style:none;padding:0;margin:18px 0 0}
+.timeline li{position:relative;padding:0 0 16px 26px;font-size:15px}
+.timeline li::before{content:"";position:absolute;left:5px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--line);border:2px solid var(--surface);box-shadow:0 0 0 1.5px var(--line)}
+.timeline li::after{content:"";position:absolute;left:9.5px;top:20px;bottom:-2px;width:1.5px;background:var(--line)}
+.timeline li:last-child::after{display:none}
+.timeline li.reached::before{background:var(--cyan);box-shadow:0 0 0 1.5px var(--cyan)}
+.timeline li.current b{color:var(--cyan)}
+.timeline small{display:block;color:var(--muted);font-size:13px}
+.my-cases{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.my-cases button{display:block;width:100%;text-align:left;background:none;border:0;padding:6px 0;font-family:var(--mono);font-size:14px;color:var(--cyan);cursor:pointer}
+.demo-note{font-size:13px;color:var(--muted);background:var(--surface-2);border-radius:8px;padding:8px 10px;margin-top:14px}
+
+/* unit */
+.unit-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:end;margin-bottom:34px}
+@media (max-width:860px){.unit-top{grid-template-columns:1fr;gap:18px}}
+.unit-facts{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--ink)}
+.unit-facts div{padding:12px 12px 0 0;font-size:14px;color:var(--muted)}
+.unit-facts b{display:block;font-size:24px;color:var(--ink);font-weight:600;line-height:1.3}
+.wings{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:24px}
+@media (max-width:860px){.wings{grid-template-columns:1fr}}
+.wing-list{display:grid;gap:6px}
+.wing{display:flex;align-items:center;gap:12px;text-align:left;background:transparent;border:1.5px solid transparent;border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:500}
+.wing svg{flex:none;width:26px;height:26px;color:var(--cyan)}
+.wing:hover{background:var(--surface)}
+.wing[aria-selected="true"]{background:var(--surface);border-color:var(--cyan)}
+.wing-detail{background:var(--navy);color:var(--hero-ink);border-radius:14px;padding:28px;position:relative;overflow:hidden;min-height:300px}
+.wing-detail h3{font-family:var(--serif);font-weight:400;font-size:28px;margin:0 0 10px;line-height:1.25}
+html[lang="en"] .wing-detail h3{font-family:var(--sans);font-weight:700}
+.wing-detail p{color:var(--hero-muted);margin:0 0 18px;max-width:52ch}
+.wing-detail h4{margin:0 0 8px;font-size:15px;color:var(--gold);font-weight:600}
+.wing-detail ul{margin:0;padding-left:20px;color:#d5e3f5}
+.wing-detail .big-ico{position:absolute;right:-20px;bottom:-24px;width:180px;height:180px;color:rgba(79,195,238,.12)}
+
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:40px;padding:0;list-style:none;counter-reset:f}
+.flow li{position:relative;padding:44px 14px 0 0;font-size:15px}
+.flow li::before{counter-increment:f;content:counter(f);position:absolute;top:0;left:0;width:30px;height:30px;border-radius:50%;background:var(--surface);border:2px solid var(--cyan);display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--cyan);z-index:1}
+html[lang="bn"] .flow li::before{content:counter(f,bengali)}
+.flow li::after{content:"";position:absolute;top:15px;left:30px;right:0;height:2px;background:var(--line)}
+.flow li:last-child::after{display:none}
+.flow b{display:block;margin-bottom:2px}
+.flow span{color:var(--muted)}
+@media (max-width:760px){.flow{grid-template-columns:1fr}.flow li{padding:0 0 18px 44px}.flow li::after{left:14px;top:30px;bottom:0;right:auto;width:2px;height:auto}}
+
+/* quiz */
+.quiz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+@media (max-width:860px){.quiz{grid-template-columns:1fr}}
+.phone{max-width:360px;margin:0 auto;width:100%;background:var(--navy);border-radius:32px;padding:14px;border:1px solid #23406e}
+.phone-screen{background:#0f2242;border-radius:22px;padding:18px 14px;min-height:300px;display:flex;flex-direction:column;gap:10px}
+.sender{color:#9DB3D3;font-size:13px;text-align:center;margin-bottom:6px}
+.bubble{background:#1d3a66;color:#EAF2FB;border-radius:16px 16px 16px 4px;padding:12px 14px;max-width:92%;font-size:15px;line-height:1.55}
+.q-meta{color:var(--muted);font-size:14px;margin-bottom:8px}
+.q-actions{display:flex;gap:10px;margin:18px 0}
+.q-actions .btn{flex:1}
+.btn-real{background:var(--ok-soft);color:var(--ok);border:1.5px solid var(--ok)}
+.btn-scam{background:var(--risk-soft);color:var(--risk);border:1.5px solid var(--risk)}
+.btn-real:disabled,.btn-scam:disabled{opacity:.45;cursor:default}
+.feedback{border-radius:12px;padding:14px 16px;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--ok-soft)} .feedback.bad{background:var(--risk-soft)}
+.feedback b{display:block;margin-bottom:4px}
+.progress{display:flex;gap:6px;margin-bottom:16px}
+.progress i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.progress i.r{background:var(--ok)} .progress i.w{background:var(--risk)} .progress i.c{background:var(--cyan)}
+
+footer{background:var(--navy);color:var(--hero-muted);padding:32px 0;font-size:14px}
+footer .wrap{display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
+footer b{color:var(--hero-ink)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;transition:transform .3s;z-index:50;font-size:15px}
+.toast.show{transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Cyber Police Unit">
+      <svg width="34" height="38" viewBox="0 0 34 38" aria-hidden="true"><circle cx="17" cy="19" r="15" fill="#132B52" stroke="#B98A2F" stroke-width="1.6"/><path d="M17 10v9m0 0-7 6m7-6 7 6" stroke="#4FC3EE" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="17" cy="10" r="2.2" fill="#4FC3EE"/><circle cx="10" cy="25" r="2.2" fill="#4FC3EE"/><circle cx="24" cy="25" r="2.2" fill="#4FC3EE"/><circle cx="17" cy="19" r="2.2" fill="#B98A2F"/></svg>
+      <span><span class="bn">সাইবার পুলিশ ইউনিট</span><span class="en">Cyber Police Unit</span>
+      <small><span class="bn">নাগরিক তথ্য · ধারণাগত প্রোটোটাইপ</span><span class="en">Citizen information · concept prototype</span></small></span>
+    </a>
+    <nav class="links" aria-label="Main">
+      <a href="#check"><span class="bn">যাচাই</span><span class="en">Check</span></a>
+      <a href="#first-hour"><span class="bn">জরুরি করণীয়</span><span class="en">First steps</span></a>
+      <a href="#report"><span class="bn">অভিযোগ</span><span class="en">Report</span></a>
+      <a href="#unit"><span class="bn">ইউনিট</span><span class="en">The unit</span></a>
+      <a href="#quiz"><span class="bn">কুইজ</span><span class="en">Quiz</span></a>
+    </nav>
+    <div class="tog">
+      <button id="langBtn" type="button" aria-label="Switch language">EN</button>
+      <button id="themeBtn" type="button" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO / SCANNER -->
+<section class="hero" id="check">
+  <div class="wrap hero-grid">
+    <div class="prototype-notice"><b><span class="bn">স্বতন্ত্র ধারণাগত প্রোটোটাইপ · বাংলাদেশ পুলিশের অফিশিয়াল সেবা নয়</span><span class="en">Independent concept prototype · not an official Bangladesh Police service</span></b><span class="bn">অভিযোগ ও ট্র্যাকিং কেবল ডেমো; কোনো তথ্য পুলিশের কাছে পাঠানো হয় না। আসল ব্যক্তিগত বা ঘটনার তথ্য দেবেন না।</span><span class="en">Reporting and tracking are demonstrations only; nothing is sent to the police. Do not enter real personal or incident details.</span></div>
+    <div>
+      <div class="unit-tag"><span class="bn">নাগরিক তথ্য · সাইবার নিরাপত্তা</span><span class="en">Citizen information · cyber safety</span></div>
+      <h1><span class="bn">সন্দেহজনক মেসেজ? সাড়া দেওয়ার আগে যাচাই করুন।</span><span class="en">Got a suspicious message? Check it before you reply.</span></h1>
+      <p class="lede"><span class="bn">এসএমএস, মেসেঞ্জার বার্তা বা লিংক পেস্ট করুন। প্রতারণার চেনা লক্ষণগুলো খুঁজে দেখানো হবে, আর প্রয়োজনে সরাসরি অভিযোগ করতে পারবেন।</span><span class="en">Paste an SMS, Messenger text or link. We'll point out the known signs of fraud, and you can report it straight away if needed.</span></p>
+      <div class="hero-facts">
+        <div><b class="bn">৪,৫৯২</b><b class="en">4,592</b><span class="bn">জনবল</span><span class="en">personnel</span></div>
+        <div><b class="bn">৭টি</b><b class="en">7</b><span class="bn">বিশেষায়িত শাখা</span><span class="en">specialist wings</span></div>
+        <div><b>999</b><span class="bn">জরুরি সেবা</span><span class="en">emergency</span></div>
+      </div>
+    </div>
+
+    <div class="scanner" role="region" aria-labelledby="scanLbl">
+      <label class="lbl" id="scanLbl" for="msg"><span class="bn">বার্তা বা লিংক</span><span class="en">Message or link</span></label>
+      <div class="scan-field" id="scanField">
+        <textarea id="msg" data-ph-bn="যেমন: আপনার বিকাশ অ্যাকাউন্ট বন্ধ হয়ে যাবে, এখনই PIN দিয়ে ভেরিফাই করুন…" data-ph-en="e.g. Your bKash account will be blocked. Verify now with your PIN…"></textarea>
+      </div>
+      <div class="chips">
+        <span class="hint"><span class="bn">নমুনা:</span><span class="en">Try:</span></span>
+        <button class="chip" type="button" data-sample="0"><span class="bn">বিকাশ PIN</span><span class="en">bKash PIN</span></button>
+        <button class="chip" type="button" data-sample="1"><span class="bn">ভুল টাকা</span><span class="en">Wrong transfer</span></button>
+        <button class="chip" type="button" data-sample="2"><span class="bn">চাকরির অফার</span><span class="en">Job offer</span></button>
+        <button class="chip" type="button" data-sample="3"><span class="bn">ক্রিপ্টো লাভ</span><span class="en">Crypto profit</span></button>
+      </div>
+      <div class="scan-actions">
+        <button class="btn btn-beam" id="scanBtn" type="button"><span class="bn">যাচাই করুন</span><span class="en">Check message</span></button>
+        <button class="btn btn-ghost" id="clearBtn" type="button" style="color:#9DB3D3"><span class="bn">মুছুন</span><span class="en">Clear</span></button>
+        <span class="privacy"><span class="bn">বিশ্লেষণ আপনার ডিভাইসেই হয়</span><span class="en">Analysed on your device only</span></span>
+      </div>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FIRST HOUR -->
+<section class="band" id="first-hour">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="bn">টাকা খোয়া গেলে প্রথম এক ঘণ্টাই সবচেয়ে জরুরি</span><span class="en">If you've lost money, the first hour matters most</span></h2>
+      <p><span class="bn">দ্রুত পদক্ষেপ নিলে লেনদেন আটকানো ও অপরাধী শনাক্ত করার সম্ভাবনা অনেক বাড়ে। এই ক্রমে কাজ করুন।</span><span class="en">Acting quickly improves the chance of freezing the transaction and tracing the offender. Work through these in order.</span></p>
+    </div>
+    <ol class="hour" style="padding:0;margin:0">
+      <li><h3><span class="bn">লেনদেন আটকাতে বলুন</span><span class="en">Ask to freeze the transaction</span></h3><p><span class="bn">আপনার ব্যাংক বা MFS-এর অফিশিয়াল হেল্পলাইনে কল করুন। নম্বরটি অ্যাপ বা কার্ডেই লেখা থাকে — মেসেজে দেওয়া নম্বরে নয়।</span><span class="en">Call your bank or MFS provider's official helpline — use the number printed in the app or on your card, never one from the message.</span></p></li>
+      <li><h3><span class="bn">প্রমাণ মুছবেন না</span><span class="en">Keep every piece of evidence</span></h3><p><span class="bn">স্ক্রিনশট, ট্রানজেকশন আইডি, প্রতারকের নম্বর, প্রোফাইল লিংক ও সময় সংরক্ষণ করুন।</span><span class="en">Save screenshots, transaction IDs, the scammer's number, profile links and the time it happened.</span></p></li>
+      <li><h3><span class="bn">অ্যাকাউন্ট সুরক্ষিত করুন</span><span class="en">Secure your accounts</span></h3><p><span class="bn">PIN ও পাসওয়ার্ড বদলান, টু-ফ্যাক্টর অথেনটিকেশন চালু করুন, অচেনা ডিভাইস লগআউট করুন।</span><span class="en">Change PINs and passwords, switch on two-factor authentication and log out unknown devices.</span></p></li>
+      <li><h3><span class="bn">অভিযোগ দাখিল করুন</span><span class="en">File a report</span></h3><p><span class="bn">নিচের ফর্মে বিস্তারিত দিন। একটি ট্র্যাকিং নম্বর পাবেন যা দিয়ে অগ্রগতি দেখতে পারবেন।</span><span class="en">Fill in the form below. You'll get a tracking number to follow your case.</span></p></li>
+    </ol>
+    <div class="hour-foot">
+      <a class="call999" href="tel:999"><b>999</b><span class="bn">প্রাণের ঝুঁকি বা তাৎক্ষণিক বিপদে কল করুন</span><span class="en">Call if anyone is in immediate danger</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- REPORT -->
+<section class="band" id="report">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="bn">সাইবার অপরাধের অভিযোগ করুন</span><span class="en">Report a cyber crime</span></h2>
+      <p><span class="bn">চার ধাপের অভিযোগ-প্রবাহের প্রোটোটাইপ। এটি কোনো বাস্তব অভিযোগ দাখিল বা পুলিশের সঙ্গে যোগাযোগ করে না।</span><span class="en">A four-step report-flow prototype. It does not file a real report or contact the police.</span></p>
+    </div>
+    <div class="demo-note" style="margin:0 0 18px"><span class="bn">ডেমো ফর্মে বাস্তব নাম, ফোন নম্বর, লেনদেনের তথ্য বা সংবেদনশীল বিবরণ দেবেন না।</span><span class="en">Do not enter real names, phone numbers, transaction details or sensitive information in this demo form.</span></div>
+    <div class="report-grid">
+      <div class="panel" id="wizard"></div>
+      <aside class="panel track">
+        <h3><span class="bn">ডেমো ট্র্যাকিং দেখুন</span><span class="en">Preview demo tracking</span></h3>
+        <p><span class="bn">এই ব্রাউজারে তৈরি ডেমো নম্বর লিখুন।</span><span class="en">Enter a demo number created in this browser.</span></p>
+        <form id="trackForm">
+          <input id="trackInput" aria-label="Tracking number" placeholder="DEMO-FIN-2026-000000" autocomplete="off">
+          <button class="btn btn-primary" type="submit"><span class="bn">দেখুন</span><span class="en">Track</span></button>
+        </form>
+        <div id="trackOut" aria-live="polite"></div>
+        <div class="my-cases" id="myCases"></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- UNIT -->
+<section class="band" id="unit">
+  <div class="wrap">
+    <div class="unit-top">
+      <div class="sec-head" style="margin:0">
+        <h2><span class="bn">এক ছাদের নিচে সাইবার তদন্ত</span><span class="en">Cyber investigations, under one roof</span></h2>
+        <p><span class="bn">সাইবার নিরাপত্তা, নেটওয়ার্ক প্রশাসন, ডার্ক ওয়েব, ক্রিপ্টোকারেন্সি, ম্যালওয়্যার ও আর্থিক ডেটা বিশ্লেষণে বিশেষজ্ঞ নিয়োগের পরিকল্পনা রয়েছে। ডিজিটাল ফরেনসিক ল্যাবরেটরি স্থাপনের কাজ চলছে।</span><span class="en">The unit plans to recruit specialists in cybersecurity, network administration, the dark web, cryptocurrency, malware and financial-data analysis. A digital-forensics laboratory is being established.</span></p>
+      </div>
+      <div class="unit-facts">
+        <div><b class="bn">৪,৫৯২</b><b class="en">4,592</b><span class="bn">জনবল</span><span class="en">personnel</span></div>
+        <div><b class="bn">৭টি</b><b class="en">7</b><span class="bn">বিশেষায়িত শাখা</span><span class="en">specialist wings</span></div>
+        <div><b class="bn">অতি. আইজিপি</b><b class="en">Addl. IGP</b><span class="bn">মোহাম্মদ ইকবাল হোসেন</span><span class="en">Mohammad Iqbal Hossain</span></div>
+      </div>
+    </div>
+    <div class="wings">
+      <div class="wing-list" role="tablist" id="wingList" aria-label="Specialist wings"></div>
+      <div class="wing-detail" role="tabpanel" id="wingDetail" aria-live="polite"></div>
+    </div>
+    <ol class="flow">
+      <li><b><span class="bn">ডেমো অভিযোগ গ্রহণ</span><span class="en">Demo report received</span></b><span><span class="bn">সম্ভাব্য গ্রহণ-পথ</span><span class="en">Illustrative intake step</span></span></li>
+      <li><b><span class="bn">প্রাথমিক যাচাই</span><span class="en">Triage</span></b><span><span class="bn">গুরুত্ব ও ধরন নির্ধারণ</span><span class="en">Urgency and type assessed</span></span></li>
+      <li><b><span class="bn">বিশেষায়িত শাখা</span><span class="en">Specialist wing</span></b><span><span class="bn">সংশ্লিষ্ট বিশেষজ্ঞ দল</span><span class="en">Matched expert team</span></span></li>
+      <li><b><span class="bn">ফরেনসিক বিশ্লেষণ</span><span class="en">Forensic analysis</span></b><span><span class="bn">ডিজিটাল প্রমাণ সংরক্ষণ</span><span class="en">Digital evidence secured</span></span></li>
+      <li><b><span class="bn">আইনি ব্যবস্থা</span><span class="en">Legal action</span></b><span><span class="bn">মামলা ও প্রসিকিউশন</span><span class="en">Case and prosecution</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="band" id="quiz">
+  <div class="wrap quiz">
+    <div>
+      <div class="sec-head" style="margin-bottom:20px">
+        <h2><span class="bn">আসল না প্রতারণা? নিজেকে যাচাই করুন</span><span class="en">Real or scam? Test yourself</span></h2>
+        <p><span class="bn">বাংলাদেশে প্রচলিত ছয়টি বার্তা। প্রতিটি পড়ে সিদ্ধান্ত নিন, তারপর ব্যাখ্যা দেখুন।</span><span class="en">Six messages common in Bangladesh. Decide on each one, then read why.</span></p>
+      </div>
+      <div id="quizSide"></div>
+    </div>
+    <div class="phone"><div class="phone-screen" id="phone"></div></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b><span class="bn">স্বতন্ত্র ধারণাগত প্রোটোটাইপ</span><span class="en">Independent concept prototype</span></b><br>
+      <span class="bn">এটি বাংলাদেশ পুলিশের অফিশিয়াল সেবা নয়। অভিযোগ দাখিল ও ট্র্যাকিং কাল্পনিক ডেমো; কোনো তথ্য কোথাও পাঠানো হয় না। বাস্তব সহায়তার জন্য সরাসরি যাচাইকৃত সরকারি চ্যানেল ব্যবহার করুন।</span><span class="en">This is not an official Bangladesh Police service. Filing and tracking are simulated; no information is transmitted. Use verified government channels for real assistance.</span></div>
+    <div><span class="bn">ইউনিট-সংক্রান্ত বিবরণ: প্রদত্ত প্রকল্প-সংক্ষিপ্তের ভিত্তিতে</span><span class="en">Unit details: based on the supplied project brief</span><br>Concept: Engr Abu Kowsar</div>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let lang=store.get('cpu_lang','bn');
+const L=(bn,en)=>lang==='bn'?bn:en;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const bnNum=n=>lang==='bn'?String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]):String(n);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2600)}
+
+/* theme + language */
+const themeSaved=store.get('cpu_theme',null);
+if(themeSaved) document.documentElement.dataset.theme=themeSaved;
+$('#themeBtn').onclick=()=>{
+  const cur=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const nx=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=nx;store.set('cpu_theme',nx);
+};
+function applyLang(){
+  document.documentElement.lang=lang;
+  $('#langBtn').textContent=lang==='bn'?'EN':'বাং';
+  $$('[data-ph-bn]').forEach(el=>el.placeholder=el.dataset['ph'+(lang==='bn'?'Bn':'En')]);
+  document.title=L('সাইবার পুলিশ ইউনিট — নাগরিক তথ্য প্রোটোটাইপ','Cyber Police Unit — Citizen information prototype');
+  if(lastScan) renderResult(lastScan);
+  renderWizard(); renderWings(); renderQuiz(); renderMyCases();
+  if(lastTrack) renderTrack(lastTrack);
+}
+$('#langBtn').onclick=()=>{lang=lang==='bn'?'en':'bn';store.set('cpu_lang',lang);applyLang()};
+
+/* ---------- SCANNER ---------- */
+const SAMPLES=[
+ 'প্রিয় গ্রাহক, আপনার বিকাশ অ্যাকাউন্ট ২৪ ঘণ্টার মধ্যে বন্ধ হয়ে যাবে। এখনই এই লিংকে গিয়ে PIN দিয়ে ভেরিফাই করুন: http://bkash-verify.xyz/login',
+ 'ভাই, আমি ভুল করে আপনার নম্বরে ৫,০০০ টাকা পাঠিয়ে ফেলেছি। দয়া করে টাকাটা ফেরত দিন, খুব জরুরি। আমার মায়ের অপারেশন।',
+ 'ঘরে বসে দৈনিক ৩,০০০ টাকা আয় করুন! পার্ট-টাইম চাকরি। রেজিস্ট্রেশন ফি মাত্র ৫০০ টাকা নগদে পাঠান। বিস্তারিত: bit.ly/job-bd24',
+ 'Congratulations! Join our Binance USDT group — guaranteed profit, double your investment in 7 days. Install AnyDesk so our agent can set up your account.'
+];
+const RULES=[
+ {k:'secret',w:35,re:/(\bOTP\b|\bPIN\b|পিন|ওটিপি|ভেরিফিকেশন কোড|verification code|password|পাসওয়ার্ড|গোপন কোড)/gi,
+  bn:'PIN, OTP বা পাসওয়ার্ড চাওয়া হচ্ছে',en:'Asks for a PIN, OTP or password',
+  tbn:'কোনো ব্যাংক, MFS প্রতিষ্ঠান বা পুলিশ কখনো আপনার PIN বা OTP চায় না।',ten:'No bank, MFS provider or police officer will ever ask for your PIN or OTP.'},
+ {k:'blackmail',w:35,re:/(ভাইরাল|viral|private (photo|video)|ছবি ছড়িয়ে|ভিডিও ছড়িয়ে|ফাঁস করে|leak)/gi,
+  bn:'ছবি বা ভিডিও ছড়ানোর হুমকি',en:'Threat to leak photos or videos',
+  tbn:'টাকা দেবেন না, যোগাযোগ বন্ধ করুন এবং সব প্রমাণ রেখে অভিযোগ করুন। আপনার দোষ নেই।',ten:"Don't pay. Stop contact, keep all evidence and report it. This is not your fault."},
+ {k:'wrongsend',w:30,re:/(ভুল করে|ভুলে পাঠ\S*|wrongly sent|by mistake|mistakenly|send it back|ফেরত (দিন|পাঠান|দেন))/gi,
+  bn:'"ভুল করে টাকা পাঠিয়েছি" কৌশল',en:'The "sent money by mistake" trick',
+  tbn:'অ্যাপে ঢুকে নিজে ব্যালান্স দেখুন। ভুয়া এসএমএস দেখে কখনো টাকা ফেরত পাঠাবেন না।',ten:'Open your app and check the balance yourself. Never "refund" based on an SMS.'},
+ {k:'remote',w:30,re:/(anydesk|teamviewer|quick ?support|rustdesk|\.apk\b|অ্যাপ ইনস্টল)/gi,
+  bn:'রিমোট অ্যাক্সেস অ্যাপ বা APK ইনস্টল করতে বলা',en:'Asks you to install a remote-access app or APK',
+  tbn:'এসব অ্যাপ দিয়ে প্রতারক আপনার ফোন নিয়ন্ত্রণ করতে পারে।',ten:'These apps let a scammer take control of your phone.'},
+ {k:'prize',w:25,re:/(lottery|you have won|winner|prize|reward|congratulations|লটারি|পুরস্কার|জিতেছেন|বিজয়ী|অভিনন্দন|উপহার)/gi,
+  bn:'পুরস্কার বা লটারির লোভ',en:'Prize or lottery bait',
+  tbn:'যে লটারিতে অংশ নেননি, তাতে জেতা সম্ভব নয়।',ten:"You can't win a draw you never entered."},
+ {k:'fee',w:25,re:/(registration fee|processing fee|security deposit|রেজিস্ট্রেশন ফি|ফি মাত্র|জামানত|অগ্রিম)/gi,
+  bn:'আগে টাকা বা ফি চাওয়া',en:'Asks for an upfront fee',
+  tbn:'বৈধ নিয়োগে আগাম ফি নেওয়া হয় না।',ten:'Genuine employers do not charge to hire you.'},
+ {k:'crypto',w:25,re:/(crypto|bitcoin|\bUSDT\b|binance|guaranteed (profit|return)|double your|দ্বিগুণ|নিশ্চিত লাভ|ক্রিপ্টো)/gi,
+  bn:'নিশ্চিত বা দ্বিগুণ লাভের প্রতিশ্রুতি',en:'Promise of guaranteed or doubled returns',
+  tbn:'কোনো বৈধ বিনিয়োগ নিশ্চিত লাভের নিশ্চয়তা দেয় না।',ten:'No legitimate investment guarantees profit.'},
+ {k:'authority',w:20,re:/(মামলা|গ্রেফতার|warrant|arrest|আদালত|court|পুলিশ কেস|police case)/gi,
+  bn:'মামলা বা গ্রেফতারের ভয় দেখানো',en:'Threatens arrest or a court case',
+  tbn:'পুলিশ ফোনে টাকা নিয়ে মামলা মীমাংসা করে না। নিকটস্থ থানায় নিজে যাচাই করুন।',ten:"Police don't settle cases for money over the phone. Verify at your local station."},
+ {k:'urgent',w:15,re:/(urgent|immediately|within 24 ?hours?|suspend\w*|blocked|জরুরি|এখনই|দ্রুত|বন্ধ হয়ে যাবে|ব্লক|স্থগিত|২৪ ঘণ্টা)/gi,
+  bn:'তাড়াহুড়ো করানোর চাপ',en:'Pressure to act fast',
+  tbn:'প্রতারকেরা চায় আপনি না ভেবে কাজ করুন। থামুন, যাচাই করুন।',ten:'Scammers want you to act before you think. Pause and verify.'},
+ {k:'money',w:15,re:/(send money|টাকা পাঠা\S*|টাকা ফেরত|সেন্ড মানি|cash ?out|ক্যাশ আউট|নগদে পাঠান|bkash|nagad|rocket|বিকাশ|রকেট)/gi,
+  bn:'টাকা বা MFS লেনদেনের অনুরোধ',en:'Requests money or an MFS transfer',
+  tbn:'অচেনা কারো অনুরোধে টাকা পাঠানোর আগে ফোন করে পরিচয় নিশ্চিত হোন।',ten:'Call and confirm who it is before sending money to anyone.'},
+ {k:'job',w:10,re:/(ঘরে বসে|work from home|part[- ]?time|daily income|দৈনিক|পার্ট-টাইম)/gi,
+  bn:'অবাস্তব সহজ আয়ের প্রস্তাব',en:'Too-easy income offer',
+  tbn:'অল্প কাজে বেশি আয়ের প্রস্তাব সাধারণত প্রতারণা।',ten:'High pay for little work is a classic lure.'}
+];
+const SHORT=['bit.ly','tinyurl.com','t.ly','cutt.ly','rb.gy','is.gd','shorturl.at','goo.su','tiny.cc'];
+const BADTLD=/\.(xyz|top|click|buzz|live|site|online|icu|cfd|sbs|rest|work|support)$/i;
+const BRANDS=[['bkash',/(^|\.)bkash\.com$/],['nagad',/(^|\.)nagad\.com\.bd$/],['rocket',/(^|\.)dutchbanglabank\.com$/],['facebook',/(^|\.)(facebook\.com|fb\.com)$/],['police',/(^|\.)police\.gov\.bd$/],['gov',/\.gov\.bd$/]];
+
+function analyse(text){
+  const flags=[],ranges=[];let score=0;
+  for(const r of RULES){
+    const ms=[...text.matchAll(r.re)];
+    if(ms.length){score+=r.w;flags.push({...r,minor:r.w<20});ms.forEach(m=>ranges.push([m.index,m.index+m[0].length]))}
+  }
+  const urlRe=/(https?:\/\/[^\s]+|www\.[^\s]+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|net|org|xyz|top|click|info|link|buzz|live|site|online|icu|ly|gd|at|bd)(?:\/[^\s]*)?)/gi;
+  for(const m of text.matchAll(urlRe)){
+    let raw=m[0].replace(/[).,!?।]+$/,''),host='';
+    try{host=new URL(/^https?:/i.test(raw)?raw:'http://'+raw).hostname.toLowerCase()}catch(e){continue}
+    const add=(w,bn,en,tbn,ten)=>{score+=w;flags.push({bn,en,tbn,ten,minor:w<20,url:true});ranges.push([m.index,m.index+raw.length])};
+    if(SHORT.includes(host)) add(20,'ছোট করা লিংক ('+host+')','Shortened link ('+host+')','আসল গন্তব্য লুকানো থাকে। ক্লিক করবেন না।','It hides the real destination. Don’t tap it.');
+    if(BADTLD.test(host)) add(20,'সন্দেহজনক ডোমেইন ('+host+')','Suspicious domain ('+host+')','এ ধরনের ডোমেইন প্রায়ই ফিশিংয়ে ব্যবহৃত হয়।','Domains like this are often used for phishing.');
+    if(/^\d+\.\d+\.\d+\.\d+$/.test(host)) add(25,'নামের বদলে আইপি ঠিকানা','Raw IP address instead of a name','বৈধ প্রতিষ্ঠান এভাবে লিংক পাঠায় না।','Legitimate organisations don’t send links like this.');
+    for(const [b,ok] of BRANDS){ if(host.includes(b)&&!ok.test(host)){ add(35,'নকল ওয়েবসাইট — "'+b+'" নাম ব্যবহার করা হয়েছে','Look-alike site using the name "'+b+'"','এটি অফিশিয়াল ডোমেইন নয়। সরাসরি অফিশিয়াল অ্যাপ ব্যবহার করুন।','This is not the official domain. Use the official app directly.');break} }
+    if(/^http:\/\//i.test(raw)) add(5,'এনক্রিপশনহীন (http) লিংক','Unencrypted (http) link','তথ্য সুরক্ষিত নয়।','Data sent here is not protected.');
+  }
+  // merge ranges
+  ranges.sort((a,b)=>a[0]-b[0]);const merged=[];
+  for(const r of ranges){const l=merged[merged.length-1];if(l&&r[0]<=l[1])l[1]=Math.max(l[1],r[1]);else merged.push([...r])}
+  let html='',i=0;for(const [s,e] of merged){html+=esc(text.slice(i,s))+'<mark>'+esc(text.slice(s,e))+'</mark>';i=e}html+=esc(text.slice(i));
+  score=Math.min(100,score);
+  return {text,score,flags,html};
+}
+let lastScan=null;
+function renderResult(r){
+  const lvl=r.score>=55?'high':r.score>=25?'mid':'low';
+  const V={high:[L('সম্ভাব্য প্রতারণা','Likely a scam'),'#e0564f'],mid:[L('সতর্ক থাকুন','Be careful'),'#e2a33b'],low:[L('বড় কোনো বিপদসংকেত পাওয়া যায়নি','No major warning signs found'),'#2b9a6f']}[lvl];
+  const flags=r.flags.sort((a,b)=>(a.minor?1:0)-(b.minor?1:0));
+  const out=$('#result');
+  out.innerHTML=`
+   <div class="verdict"><span class="score" style="color:${V[1]}">${bnNum(r.score)}</span><div><h3 style="color:${V[1]}">${V[0]}</h3>
+   <div style="color:#9DB3D3;font-size:14px">${L('ঝুঁকি স্কোর, ১০০-এর মধ্যে','Risk score out of 100')} · ${bnNum(flags.length)} ${L('টি লক্ষণ','signs')}</div></div></div>
+   <div class="meter" aria-hidden="true"><i style="left:0"></i></div>
+   <div class="marked">${r.html}</div>
+   ${flags.length?`<ul class="flags">${flags.map(f=>`<li class="${f.minor?'minor':''}"><b>${esc(L(f.bn,f.en))}</b><span>${esc(L(f.tbn,f.ten))}</span></li>`).join('')}</ul>`
+     :`<p style="color:#9DB3D3;margin:14px 0 0">${L('তবুও PIN, OTP বা পাসওয়ার্ড কারো সাথে শেয়ার করবেন না। সন্দেহ হলে প্রেরককে আলাদাভাবে ফোন করে যাচাই করুন।','Still, never share a PIN, OTP or password. If in doubt, call the sender separately to confirm.')}</p>`}
+   ${lvl!=='low'?`<div class="next-steps"><button class="btn btn-beam" type="button" id="reportThis">${L('এই বার্তা রিপোর্ট করুন','Report this message')}</button><a class="btn btn-ghost" href="#first-hour" style="color:#BCD3EE">${L('টাকা পাঠিয়ে ফেলেছেন?','Already sent money?')}</a></div>`:''}`;
+  out.classList.add('show');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const i=out.querySelector('.meter i');if(i)i.style.left=`calc(${r.score}% - 2px)`}));
+  const rb=$('#reportThis');if(rb)rb.onclick=()=>{
+    const t=r.text;const cat=/crypto|usdt|binance|bitcoin|ক্রিপ্টো|দ্বিগুণ/i.test(t)?'CRY':/ভাইরাল|viral|leak|ফাঁস/i.test(t)?'BLK':'FIN';
+    W={step:1,cat,desc:t,when:'',platform:'',amount:'',txid:'',links:'',evidence:['shot'],name:'',phone:'',district:'',consent:false};
+    renderWizard();$('#report').scrollIntoView();toast(L('বার্তাটি অভিযোগ ফর্মে যুক্ত হয়েছে','Message added to the report form'));
+  };
+}
+function runScan(){
+  const text=$('#msg').value.trim();
+  if(!text){toast(L('প্রথমে একটি বার্তা বা লিংক পেস্ট করুন','Paste a message or link first'));$('#msg').focus();return}
+  const f=$('#scanField');f.classList.remove('scanning');void f.offsetWidth;f.classList.add('scanning');
+  $('#scanBtn').disabled=true;
+  const delay=matchMedia('(prefers-reduced-motion: reduce)').matches?0:1000;
+  setTimeout(()=>{lastScan=analyse(text);renderResult(lastScan);$('#scanBtn').disabled=false;f.classList.remove('scanning')},delay);
+}
+$('#scanBtn').onclick=runScan;
+$('#msg').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))runScan()});
+$('#clearBtn').onclick=()=>{$('#msg').value='';$('#result').classList.remove('show');lastScan=null;$('#msg').focus()};
+$$('.chip').forEach(c=>c.onclick=()=>{$('#msg').value=SAMPLES[c.dataset.sample];runScan()});
+
+/* ---------- WINGS ---------- */
+const ICON={
+ cyb:'<path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/>',
+ net:'<circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v5m0 0-6 5m6-5 6 5"/>',
+ dark:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
+ cry:'<circle cx="12" cy="12" r="9"/><path d="M10 7v10m0-10h3a2.5 2.5 0 0 1 0 5h-3m0 0h3.5a2.5 2.5 0 0 1 0 5H10M11 5v2m0 10v2"/>',
+ mal:'<rect x="7" y="7" width="10" height="12" rx="5"/><path d="M12 7V4M7 11H4m16 0h-3M7 15H4m16 0h-3M9 5l1.5 2M15 5l-1.5 2"/>',
+ fin:'<path d="M4 20V10m6 10V4m6 16v-7m4 7H2"/>',
+ lab:'<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.5 14h9"/>'
+};
+const WINGS=[
+ {id:'cyb',bn:'সাইবার নিরাপত্তা',en:'Cybersecurity',dbn:'অ্যাকাউন্ট হ্যাক, অনুপ্রবেশ ও অনলাইন হয়রানির ঘটনা তদন্ত এবং আক্রান্ত ব্যবস্থা পুনরুদ্ধারে সহায়তা।',den:'Investigates account takeovers, intrusions and online harassment, and helps restore compromised systems.',
+  cbn:['ফেসবুক/ইমেইল অ্যাকাউন্ট হ্যাক','অনলাইন হয়রানি ও ভুয়া প্রোফাইল','প্রতিষ্ঠানে সাইবার আক্রমণ'],cen:['Hacked Facebook or email accounts','Online harassment and fake profiles','Attacks on organisations']},
+ {id:'net',bn:'নেটওয়ার্ক প্রশাসন',en:'Network administration',dbn:'আইপি, ডোমেইন ও নেটওয়ার্ক ট্রাফিক বিশ্লেষণ করে অপরাধের উৎস খুঁজে বের করা; গুজব ছড়ানো নেটওয়ার্ক শনাক্ত করা।',den:'Traces offences through IP, domain and traffic analysis, and maps networks that spread misinformation.',
+  cbn:['গুজব ও ভুয়া তথ্য প্রচার','ফিশিং ওয়েবসাইট','আইপি ও ডোমেইন অনুসন্ধান'],cen:['Misinformation campaigns','Phishing websites','IP and domain tracing']},
+ {id:'dark',bn:'ডার্ক ওয়েব গোয়েন্দা',en:'Dark-web intelligence',dbn:'ডার্ক ওয়েবে চুরি হওয়া তথ্য, অবৈধ বাজার ও অপরাধী চক্রের কার্যক্রম পর্যবেক্ষণ।',den:'Monitors stolen data, illicit marketplaces and criminal groups operating on the dark web.',
+  cbn:['ফাঁস হওয়া ব্যক্তিগত তথ্য বিক্রি','অবৈধ অনলাইন বাজার','সংঘবদ্ধ সাইবার চক্র'],cen:['Sale of leaked personal data','Illicit online markets','Organised cyber gangs']},
+ {id:'cry',bn:'ক্রিপ্টোকারেন্সি',en:'Cryptocurrency',dbn:'ব্লকচেইন লেনদেন অনুসরণ করে ক্রিপ্টো প্রতারণা ও অর্থপাচারের পথ খুঁজে বের করা।',den:'Follows blockchain transactions to trace crypto fraud and money laundering.',
+  cbn:['ভুয়া বিনিয়োগ ও পঞ্জি স্কিম','ক্রিপ্টোতে অর্থপাচার','মুক্তিপণ আদায়ের লেনদেন'],cen:['Fake investment and Ponzi schemes','Laundering through crypto','Ransom payments']},
+ {id:'mal',bn:'ম্যালওয়্যার বিশ্লেষণ',en:'Malware analysis',dbn:'ক্ষতিকর অ্যাপ, র‍্যানসমওয়্যার ও স্পাইওয়্যার বিশ্লেষণ করে কীভাবে কাজ করে ও কারা ছড়াচ্ছে তা নির্ণয়।',den:'Takes apart malicious apps, ransomware and spyware to learn how they work and who spreads them.',
+  cbn:['ক্ষতিকর APK ও রিমোট অ্যাক্সেস অ্যাপ','র‍্যানসমওয়্যার','ডেটা চুরি ও অনুপ্রবেশ'],cen:['Malicious APKs and remote-access apps','Ransomware','Data theft and intrusions']},
+ {id:'fin',bn:'আর্থিক ডেটা বিশ্লেষণ',en:'Financial-data analysis',dbn:'ব্যাংক ও MFS লেনদেনের ধারা বিশ্লেষণ করে প্রতারণার অর্থের গতিপথ শনাক্ত ও আটকানোর উদ্যোগ।',den:'Analyses bank and MFS transaction patterns to follow and freeze the proceeds of fraud.',
+  cbn:['বিকাশ/নগদ প্রতারণা','কার্ড ও অনলাইন ব্যাংকিং জালিয়াতি','ই-কমার্স প্রতারণা'],cen:['bKash / Nagad fraud','Card and online-banking fraud','E-commerce fraud']},
+ {id:'lab',bn:'ডিজিটাল ফরেনসিক ল্যাব',en:'Digital forensic lab',dbn:'মোবাইল, কম্পিউটার ও অনলাইন অ্যাকাউন্ট থেকে আদালতে গ্রহণযোগ্য উপায়ে ডিজিটাল প্রমাণ সংগ্রহ ও সংরক্ষণ।',den:'Recovers and preserves digital evidence from phones, computers and accounts in a court-admissible way.',
+  cbn:['ব্ল্যাকমেইল ও সেক্সটরশন','মুছে ফেলা তথ্য পুনরুদ্ধার','আদালতের জন্য প্রমাণ প্রস্তুত'],cen:['Blackmail and sextortion','Recovering deleted data','Preparing evidence for court']}
+];
+let wingSel='fin';
+const svg=(id,cls='')=>`<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[id]}</svg>`;
+function renderWings(){
+  $('#wingList').innerHTML=WINGS.map(w=>`<button class="wing" role="tab" type="button" aria-selected="${w.id===wingSel}" data-w="${w.id}">${svg(w.id)}<span>${L(w.bn,w.en)}</span></button>`).join('');
+  $$('.wing').forEach(b=>{b.onclick=()=>{wingSel=b.dataset.w;renderWings()};
+    b.onkeydown=e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const i=WINGS.findIndex(w=>w.id===wingSel);wingSel=WINGS[(i+(e.key==='ArrowDown'?1:WINGS.length-1))%WINGS.length].id;renderWings();$(`.wing[data-w="${wingSel}"]`).focus()}}});
+  const w=WINGS.find(x=>x.id===wingSel);
+  $('#wingDetail').innerHTML=`${svg(w.id,'big-ico')}<h3>${L(w.bn,w.en)}</h3><p>${L(w.dbn,w.den)}</p><h4>${L('যে ধরনের অপরাধ দেখে','Cases it handles')}</h4><ul>${L(w.cbn,w.cen).map(c=>`<li>${c}</li>`).join('')}</ul>`;
+}
+
+/* ---------- REPORT WIZARD ---------- */
+const CATS=[
+ {c:'FIN',w:'fin',bn:'আর্থিক / MFS প্রতারণা',en:'Financial / MFS fraud',sbn:'বিকাশ, নগদ, কার্ড, ই-কমার্স',sen:'bKash, Nagad, cards, e-commerce'},
+ {c:'HCK',w:'cyb',bn:'অ্যাকাউন্ট হ্যাক',en:'Hacked account',sbn:'ফেসবুক, ইমেইল, হোয়াটসঅ্যাপ',sen:'Facebook, email, WhatsApp'},
+ {c:'BLK',w:'lab',bn:'ব্ল্যাকমেইল / সেক্সটরশন',en:'Blackmail / sextortion',sbn:'ছবি বা ভিডিও নিয়ে হুমকি',sen:'Threats over photos or videos'},
+ {c:'HAR',w:'cyb',bn:'অনলাইন হয়রানি',en:'Online harassment',sbn:'হুমকি, ভুয়া প্রোফাইল, স্টকিং',sen:'Threats, fake profiles, stalking'},
+ {c:'MIS',w:'net',bn:'গুজব ও ভুয়া তথ্য',en:'Misinformation',sbn:'বিভ্রান্তিকর পোস্ট, ভুয়া পেজ',sen:'Misleading posts, fake pages'},
+ {c:'CRY',w:'cry',bn:'ক্রিপ্টো / বিনিয়োগ প্রতারণা',en:'Crypto / investment fraud',sbn:'নিশ্চিত লাভের প্রলোভন',sen:'Guaranteed-profit schemes'},
+ {c:'DAT',w:'mal',bn:'ডেটা চুরি / ম্যালওয়্যার',en:'Data theft / malware',sbn:'ক্ষতিকর অ্যাপ, অনুপ্রবেশ',sen:'Malicious apps, intrusions'},
+ {c:'OTH',w:'cyb',bn:'অন্যান্য',en:'Something else',sbn:'প্রযুক্তি-সংশ্লিষ্ট অন্য অপরাধ',sen:'Any other tech-enabled offence'}
+];
+const EVID=[['shot','স্ক্রিনশট','Screenshots'],['tx','ট্রানজেকশন আইডি / রসিদ','Transaction ID or receipt'],['num','প্রতারকের ফোন নম্বর','Scammer’s phone number'],['link','প্রোফাইল / ওয়েবসাইট লিংক','Profile or website link'],['audio','কল রেকর্ড / ভয়েস মেসেজ','Call recording or voice note']];
+const blank=()=>({step:0,cat:'',when:'',platform:'',desc:'',amount:'',txid:'',links:'',evidence:[],name:'',phone:'',district:'',consent:false});
+let W=blank(),lastReceipt=null;
+const STEPS=()=>[L('ধরন','Type'),L('ঘটনা','What happened'),L('প্রমাণ','Evidence'),L('যোগাযোগ','Contact')];
+function f(id,lblBn,lblEn,type='text',extra=''){const v=esc(W[id]||'');
+  return `<div class="field"><label for="w_${id}">${L(lblBn,lblEn)}</label>${type==='textarea'?`<textarea id="w_${id}" data-k="${id}" ${extra}>${v}</textarea>`:`<input id="w_${id}" data-k="${id}" type="${type}" value="${v}" ${extra}>`}</div>`}
+function renderWizard(){
+  const el=$('#wizard');
+  if(W.step===4&&lastReceipt){const r=lastReceipt,c=CATS.find(x=>x.c===r.cat),w=WINGS.find(x=>x.id===c.w);
+    el.innerHTML=`<div class="receipt"><h3 style="margin:0">${L('ডেমো রেকর্ড তৈরি হয়েছে','Demo record created')}</h3>
+     <p style="color:var(--muted);margin:4px 0 0">${L('এই ডেমো নম্বরটি সংরক্ষণ করুন।','Keep this demo number.')}</p>
+     <div class="docket" id="docketTxt">${r.id}</div>
+     <dl><dt>${L('ধরন','Type')}</dt><dd>${L(c.bn,c.en)}</dd><dt>${L('পাঠানো হয়েছে','Routed to')}</dt><dd>${L(w.bn,w.en)} ${L('শাখা','wing')}</dd><dt>${L('সময়','Filed')}</dt><dd>${new Date(r.t).toLocaleString(lang==='bn'?'bn-BD':'en-GB')}</dd></dl>
+     <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" type="button" id="copyD">${L('নম্বর কপি করুন','Copy number')}</button><button class="btn btn-ghost" type="button" id="trackD">${L('অবস্থা দেখুন','Track this report')}</button><button class="btn btn-ghost" type="button" id="newR">${L('নতুন অভিযোগ','New report')}</button></div>
+    <div class="demo-note">${L('ডেমো রেকর্ডটি শুধু এই ব্রাউজারে সংরক্ষিত হয়েছে, কোথাও পাঠানো হয়নি।','This demo record is saved only in this browser and was not sent anywhere.')}</div></div>`;
+    $('#copyD').onclick=()=>{navigator.clipboard?.writeText(r.id).then(()=>toast(L('কপি হয়েছে','Copied')),()=>toast(r.id))};
+    $('#trackD').onclick=()=>{$('#trackInput').value=r.id;doTrack(r.id)};
+    $('#newR').onclick=()=>{W=blank();lastReceipt=null;renderWizard()};
+    return;
+  }
+  const S=STEPS();let body='';
+  if(W.step===0){body=`<p style="margin:0 0 12px;font-weight:600">${L('কী ধরনের ঘটনা ঘটেছে?','What kind of incident is it?')}</p><div class="cats">${CATS.map(c=>`<button type="button" class="cat" data-c="${c.c}" aria-pressed="${W.cat===c.c}"><b>${L(c.bn,c.en)}</b><small>${L(c.sbn,c.sen)}</small></button>`).join('')}</div>`}
+  if(W.step===1){body=`<div class="row2">${f('when','কখন ঘটেছে?','When did it happen?','datetime-local')}${f('platform','কোন মাধ্যমে?','On which platform?','text',`placeholder="${L('যেমন: ফেসবুক, এসএমএস, বিকাশ','e.g. Facebook, SMS, bKash')}"`)}</div>
+   ${f('desc','ঘটনার বিবরণ','Describe what happened','textarea',`placeholder="${L('কে, কীভাবে যোগাযোগ করেছে, কী চেয়েছে, আপনি কী করেছেন','Who contacted you, how, what they asked for, what you did')}"`)}
+   ${['FIN','CRY'].includes(W.cat)?`<div class="row2">${f('amount','ক্ষতির পরিমাণ (টাকা)','Amount lost (BDT)','number','min="0" inputmode="numeric"')}${f('txid','ট্রানজেকশন আইডি','Transaction ID')}</div>`:''}`}
+  if(W.step===2){body=`<p style="margin:0 0 10px;font-weight:600">${L('আপনার কাছে কোন প্রমাণগুলো আছে?','Which evidence do you have?')}</p>
+   <div class="checks" style="margin-bottom:18px">${EVID.map(([k,b,e])=>`<label><input type="checkbox" data-ev="${k}" ${W.evidence.includes(k)?'checked':''}> ${L(b,e)}</label>`).join('')}</div>
+   ${f('links','সংশ্লিষ্ট লিংক বা নম্বর','Related links or numbers','textarea','style="min-height:80px"')}
+   <div class="help" style="font-size:14px;color:var(--muted)">${L('মূল ফাইলগুলো মুছবেন না। তদন্ত কর্মকর্তা প্রয়োজনে সংগ্রহ করবেন।','Don’t delete the original files. The investigating officer will collect them if needed.')}</div>`}
+  if(W.step===3){body=`<div class="row2">${f('name','আপনার নাম','Your name','text','autocomplete="name"')}${f('phone','মোবাইল নম্বর','Mobile number','tel','autocomplete="tel" placeholder="01XXXXXXXXX" inputmode="tel"')}</div>
+   ${f('district','জেলা','District','text',`placeholder="${L('যেমন: লক্ষ্মীপুর','e.g. Lakshmipur')}"`)}
+   <div class="checks"><label><input type="checkbox" id="consent" ${W.consent?'checked':''}> ${L('আমি নিশ্চিত করছি যে দেওয়া তথ্য আমার জানামতে সত্য।','I confirm the information is true to the best of my knowledge.')}</label></div>`}
+  el.innerHTML=`<ol class="stepper">${S.map((s,i)=>`<li class="${i===W.step?'on':i<W.step?'done':''}">${bnNum(i+1)}. ${s}</li>`).join('')}</ol>
+   ${body}<p class="err" id="wErr"></p>
+   <div class="wiz-nav"><button class="btn btn-ghost" type="button" id="wBack" ${W.step===0?'style="visibility:hidden"':''}>${L('পেছনে','Back')}</button>
+  <button class="btn btn-primary" type="button" id="wNext">${W.step===3?L('ডেমো রেকর্ড তৈরি করুন','Create demo record'):L('পরবর্তী','Next')}</button></div>`;
+  $$('#wizard .cat').forEach(b=>b.onclick=()=>{W.cat=b.dataset.c;renderWizard()});
+  $$('#wizard [data-k]').forEach(i=>i.oninput=()=>W[i.dataset.k]=i.value);
+  $$('#wizard [data-ev]').forEach(c=>c.onchange=()=>{W.evidence=c.checked?[...W.evidence,c.dataset.ev]:W.evidence.filter(x=>x!==c.dataset.ev)});
+  const cs=$('#consent');if(cs)cs.onchange=()=>W.consent=cs.checked;
+  $('#wBack').onclick=()=>{W.step--;renderWizard()};
+  $('#wNext').onclick=next;
+}
+function next(){
+  const err=m=>{$('#wErr').textContent=m};
+  if(W.step===0&&!W.cat)return err(L('একটি ধরন বেছে নিন।','Choose a type to continue.'));
+  if(W.step===1&&W.desc.trim().length<15)return err(L('ঘটনার বিবরণ অন্তত এক-দুই বাক্যে লিখুন।','Describe what happened in at least a sentence or two.'));
+  if(W.step===3){
+    if(!W.name.trim())return err(L('আপনার নাম লিখুন।','Enter your name.'));
+    if(!/^(\+?88)?01[3-9]\d{8}$/.test(W.phone.replace(/[\s-]/g,'')))return err(L('সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন (01XXXXXXXXX)।','Enter a valid 11-digit mobile number (01XXXXXXXXX).'));
+    if(!W.consent)return err(L('তথ্যের সত্যতা নিশ্চিত করে টিক দিন।','Tick the box to confirm the information is true.'));
+    const cases=store.get('cpu_cases',[]);
+    const id=`DEMO-${W.cat}-${new Date().getFullYear()}-${String(Math.floor(Math.random()*900000)+100000)}`;
+    const rec={id,cat:W.cat,t:Date.now(),district:W.district};
+    cases.unshift(rec);store.set('cpu_cases',cases.slice(0,10));
+    lastReceipt=rec;W.step=4;renderWizard();renderMyCases();$('#wizard').scrollIntoView({block:'nearest'});return;
+  }
+  W.step++;renderWizard();
+}
+
+/* ---------- TRACKER ---------- */
+let lastTrack=null;
+const STAGES=[[0,'ডেমো রেকর্ড তৈরি','Demo record created'],[1,'প্রাথমিক যাচাই (ডেমো)','Initial review (demo)'],[3,'বিশেষায়িত শাখা (ডেমো)','Specialist wing (demo)'],[8,'ডিজিটাল প্রমাণ বিশ্লেষণ (ডেমো)','Digital evidence analysis (demo)'],[20,'পরবর্তী আপডেটের অপেক্ষা (ডেমো)','Awaiting next update (demo)']];
+function doTrack(id){
+  id=id.trim().toUpperCase();
+  const rec=store.get('cpu_cases',[]).find(c=>c.id===id);
+  lastTrack=rec?rec:{missing:id};renderTrack(lastTrack);
+}
+function renderTrack(rec){
+  const out=$('#trackOut');
+  if(rec.missing!==undefined){out.innerHTML=`<p class="err" style="margin-top:12px">${rec.missing?L('এই নম্বরে কোনো অভিযোগ এই ব্রাউজারে পাওয়া যায়নি। নম্বরটি আবার মিলিয়ে দেখুন।','No report with this number was found in this browser. Check the number and try again.'):L('ট্র্যাকিং নম্বর লিখুন।','Enter a tracking number.')}</p>`;return}
+  const mins=(Date.now()-rec.t)/60000,c=CATS.find(x=>x.c===rec.cat),w=WINGS.find(x=>x.id===c.w);
+  let cur=0;STAGES.forEach((s,i)=>{if(mins>=s[0])cur=i});
+  out.innerHTML=`<ol class="timeline">${STAGES.map((s,i)=>`<li class="${i<=cur?'reached':''} ${i===cur?'current':''}"><b>${L(s[1],s[2])}${i===2?` — ${L(w.bn,w.en)}`:''}</b>${i<=cur?`<small>${new Date(rec.t+s[0]*60000).toLocaleTimeString(lang==='bn'?'bn-BD':'en-GB',{hour:'2-digit',minute:'2-digit'})}</small>`:''}</li>`).join('')}</ol>
+   <div class="demo-note">${L('ডেমো: ধাপগুলো দেখানোর জন্য সময় দ্রুত চলছে।','Demo: stages advance on an accelerated clock.')}</div>`;
+}
+$('#trackForm').onsubmit=e=>{e.preventDefault();doTrack($('#trackInput').value)};
+function renderMyCases(){
+  const cases=store.get('cpu_cases',[]);const el=$('#myCases');
+  if(!cases.length){el.innerHTML=`<p style="margin:0;font-size:14px">${L('এই ব্রাউজার থেকে জমা দেওয়া অভিযোগ এখানে দেখাবে।','Reports filed from this browser will appear here.')}</p>`;return}
+  el.innerHTML=`<p style="margin:0 0 4px;font-size:14px;font-weight:600;color:var(--ink)">${L('আপনার অভিযোগ','Your reports')}</p>`+cases.map(c=>`<button type="button" data-id="${c.id}">${c.id}</button>`).join('');
+  $$('#myCases button').forEach(b=>b.onclick=()=>{$('#trackInput').value=b.dataset.id;doTrack(b.dataset.id)});
+}
+
+/* ---------- QUIZ ---------- */
+const Q=[
+ {from:'+8801XXXXXXXXX',scam:true,bn:'প্রিয় গ্রাহক, আপনার বিকাশ অ্যাকাউন্ট সাময়িক বন্ধ করা হয়েছে। চালু করতে bkash-help.top লিংকে গিয়ে PIN দিন।',en:'Dear customer, your bKash account is temporarily blocked. Enter your PIN at bkash-help.top to reactivate.',
+  xbn:'অফিশিয়াল ডোমেইন নয়, আর PIN চাওয়া হচ্ছে — দুটোই নিশ্চিত প্রতারণার লক্ষণ।',xen:'Not the official domain, and it asks for your PIN — both are sure signs of fraud.'},
+ {from:'bKash',scam:false,bn:'আপনার bKash ভেরিফিকেশন কোড 482913। কোডটি কাউকে দেবেন না। (আপনি নিজেই এইমাত্র লগইন করছিলেন)',en:'Your bKash verification code is 482913. Do not share it with anyone. (You were logging in yourself just now.)',
+  xbn:'আপনি নিজে লগইন করার সময় আসা কোড আসল। বিপদ শুরু হয় যখন কেউ ফোন করে এই কোড চায়।',xen:'A code that arrives while you are logging in is genuine. The danger starts when someone calls asking for it.'},
+ {from:'Messenger · রাকিব ভাই',scam:true,bn:'দোস্ত, খুব বিপদে আছি। এখনই ১০,০০০ টাকা নগদে পাঠা, কাল ফেরত দিব। ফোন দিস না, মিটিংয়ে আছি।',en:'Bro, I’m in big trouble. Send 10,000 taka on Nagad right now, I’ll return it tomorrow. Don’t call, I’m in a meeting.',
+  xbn:'হ্যাক হওয়া অ্যাকাউন্ট থেকে পরিচিতদের কাছে টাকা চাওয়া খুব প্রচলিত। "ফোন দিস না" লাইনটি সবচেয়ে বড় সংকেত — ফোন করে যাচাই করুন।',xen:'Hacked accounts asking friends for money is very common. "Don’t call" is the biggest giveaway — call them to check.'},
+ {from:'+8801XXXXXXXXX',scam:true,bn:'ঘরে বসে মোবাইলে দৈনিক ২,৫০০ টাকা আয়। শুধু ভিডিও লাইক দিন। রেজিস্ট্রেশন ফি ৩০০ টাকা।',en:'Earn 2,500 taka daily from your phone. Just like videos. Registration fee 300 taka.',
+  xbn:'আগাম ফি ও অবাস্তব আয়ের প্রতিশ্রুতি — "টাস্ক স্ক্যাম"-এর চেনা রূপ।',xen:'An upfront fee plus unrealistic pay — the classic "task scam".'},
+ {from:'Facebook',scam:false,bn:'নতুন ডিভাইস থেকে আপনার অ্যাকাউন্টে লগইন হয়েছে। আপনি না হলে অ্যাপের সেটিংস > নিরাপত্তা থেকে সেশন বন্ধ করুন।',en:'A new device logged into your account. If this wasn’t you, end the session from Settings > Security in the app.',
+  xbn:'কোনো লিংক নেই, তথ্য চাওয়া হচ্ছে না, অ্যাপের ভেতর থেকেই ব্যবস্থা নিতে বলছে — এটি নিরাপদ সতর্কবার্তার ধরন।',xen:'No link, no request for details, and it sends you to the app itself — that’s what a safe alert looks like.'},
+ {from:'"থানা থেকে বলছি"',scam:true,bn:'আপনার নামে সাইবার মামলা হয়েছে। গ্রেফতার এড়াতে আজকের মধ্যে ২০,০০০ টাকা বিকাশে জমা দিন।',en:'A cyber case has been filed against you. To avoid arrest, pay 20,000 taka via bKash today.',
+  xbn:'পুলিশ কখনো বিকাশে টাকা নিয়ে মামলা মীমাংসা করে না। এটি পুলিশের পরিচয়ে প্রতারণা।',xen:'Police never settle cases for bKash payments. This is police impersonation fraud.'}
+];
+let qi=0,ans=[];
+function renderQuiz(){
+  const side=$('#quizSide'),ph=$('#phone');
+  const prog=`<div class="progress">${Q.map((_,i)=>`<i class="${ans[i]===true?'r':ans[i]===false?'w':i===qi?'c':''}"></i>`).join('')}</div>`;
+  if(qi>=Q.length){const s=ans.filter(Boolean).length;
+    side.innerHTML=prog+`<h3 style="font-size:24px;margin:0 0 6px">${L(`${bnNum(Q.length)}টির মধ্যে ${bnNum(s)}টি সঠিক`,`${s} of ${Q.length} correct`)}</h3>
+     <p style="color:var(--muted)">${s===Q.length?L('চমৎকার! পরিবারের সদস্যদের সাথেও কুইজটি শেয়ার করুন।','Excellent. Share the quiz with your family too.'):L('মনে রাখুন: PIN/OTP চাওয়া, তাড়াহুড়ো আর আগাম টাকা — এই তিনটি দেখলেই থামুন।','Remember: a PIN/OTP request, pressure to hurry, or money upfront — any of these means stop.')}</p>
+     <button class="btn btn-primary" type="button" id="qRe">${L('আবার খেলুন','Play again')}</button>`;
+    ph.innerHTML=`<div class="sender">${L('কুইজ শেষ','Quiz complete')}</div><div class="bubble">${L('সন্দেহজনক কিছু পেলে উপরের যাচাই টুলে পেস্ট করুন।','Paste anything suspicious into the checker above.')}</div>`;
+    $('#qRe').onclick=()=>{qi=0;ans=[];renderQuiz()};return}
+  const q=Q[qi],done=ans[qi]!==undefined;
+  ph.innerHTML=`<div class="sender">${esc(q.from)}</div><div class="bubble">${esc(L(q.bn,q.en))}</div>`;
+  side.innerHTML=prog+`<div class="q-meta">${L(`বার্তা ${bnNum(qi+1)} / ${bnNum(Q.length)}`,`Message ${qi+1} of ${Q.length}`)}</div>
+   <div class="q-actions"><button class="btn btn-real" type="button" data-a="0" ${done?'disabled':''}>${L('আসল','Real')}</button><button class="btn btn-scam" type="button" data-a="1" ${done?'disabled':''}>${L('প্রতারণা','Scam')}</button></div>
+   <div class="feedback ${done?'show '+(ans[qi]?'good':'bad'):''}" aria-live="polite">${done?`<b>${ans[qi]?L('ঠিক ধরেছেন।','You got it.'):L('এবার হয়নি।','Not this time.')} ${q.scam?L('এটি প্রতারণা।','It’s a scam.'):L('এটি আসল।','It’s genuine.')}</b>${L(q.xbn,q.xen)}`:''}</div>
+   ${done?`<button class="btn btn-primary" type="button" id="qNext" style="margin-top:14px">${qi===Q.length-1?L('ফলাফল দেখুন','See your score'):L('পরের বার্তা','Next message')}</button>`:''}`;
+  $$('.q-actions .btn').forEach(b=>b.onclick=()=>{ans[qi]=(b.dataset.a==='1')===q.scam;renderQuiz();$('#qNext')?.focus()});
+  const n=$('#qNext');if(n)n.onclick=()=>{qi++;renderQuiz()};
+}
+
+applyLang();
+})();
+</script>
+</body>
+</html>
