@@ -1,10 +1,13 @@
 "use client";
 
-import { ArrowRight, Ban, Calendar, FileText, FlaskConical, Phone, ScanSearch, Search, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, Ban, Calendar, FileText, Phone, ScanSearch, Search, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { commonScams, emergencyLines, policeNever } from "./components/bd-context";
-import { launchArticle, mandate, specialists, structure, unit } from "./components/content";
+import { international, launchArticle, mandate, specialists, structure, unit } from "./components/content";
+import { DivisionNetwork } from "./components/DivisionNetwork";
+import { HygieneCheck } from "./components/HygieneCheck";
+import { SectionHead } from "./components/SectionHead";
 import { useSite } from "./components/SiteProvider";
 
 export default function Home() {
@@ -17,28 +20,34 @@ export default function Home() {
     { href: "tel:999", icon: Phone, title: t("জরুরি ৯৯৯", "Emergency 999"), text: t("তাৎক্ষণিক বিপদে এখনই কল করুন", "Call now if you are in danger"), urgent: true },
   ];
 
+  const stats = [
+    { value: t("৪,৫৯২", "4,592"), label: t("অনুমোদিত জনবল", "Approved personnel") },
+    { value: t("৮", "8"), label: t("বিভাগে বিভাগীয় তদারকি", "Divisions with DIG-level oversight") },
+    { value: t("৬৪", "64"), label: t("জেলায় এসপি পর্যায়ের নেতৃত্ব", "Districts with SP-level leadership") },
+    { value: t("১০", "10"), label: t("ধরনের বিশেষজ্ঞ পদ", "Types of specialist roles") },
+  ];
+
   return (
     <>
       <section className="hero">
         <div className="page-wrap hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow eyebrow-light"><span className="eyebrow-dot" />{t("বাংলাদেশ পুলিশ · বিশেষায়িত ইউনিট", "BANGLADESH POLICE · SPECIALISED UNIT")}</p>
+            <p className="eyebrow eyebrow-light"><span className="eyebrow-dot" />{t("বাংলাদেশ পুলিশ · বিশেষায়িত ও স্বতন্ত্র ইউনিট", "BANGLADESH POLICE · SPECIALISED UNIT")}</p>
             <h1>{t("নিরাপদ সাইবার স্পেস, সুরক্ষিত নাগরিক", "A safer cyberspace for every citizen")}</h1>
-            <p className="hero-lede">{t("সাইবার অপরাধ দমন, ডিজিটাল নিরাপত্তা জোরদারকরণ এবং প্রযুক্তিভিত্তিক তদন্ত সক্ষমতা বৃদ্ধিতে এক ছাতার নিচে বাংলাদেশ পুলিশের সাইবার কার্যক্রম।", "Bangladesh Police's cyber operations under one umbrella — countering cybercrime, strengthening digital security and building technology-led investigation.")}</p>
+            <p className="hero-lede">{t("সদর দপ্তর থেকে প্রতিটি থানা পর্যন্ত এক ছাতার নিচে — সাইবার অপরাধ দমন, ডিজিটাল নিরাপত্তা ও প্রযুক্তিভিত্তিক তদন্তে বাংলাদেশ পুলিশের নতুন শক্তি।", "One umbrella from headquarters to every police station — Bangladesh Police's new force against cybercrime, for digital security and technology-led investigation.")}</p>
             <div className="hero-actions">
               <Link className="button button-bright" href="/report">{t("অভিযোগ দাখিল করুন", "File a complaint")}<ArrowRight size={18} /></Link>
               <Link className="button button-ghost" href="/about">{t("ইউনিট সম্পর্কে জানুন", "About the unit")}</Link>
             </div>
-          </div>
-          <aside className="launch-card">
-            <span className="launch-tag"><Calendar size={14} />{t("যাত্রা শুরু", "Operational since")} {t(unit.launched.bn, unit.launched.en)}</span>
-            <p className="launch-figure">{t(unit.personnel.bn, unit.personnel.en)}</p>
-            <p className="launch-caption">{t("অনুমোদিত অর্গানোগ্রাম অনুযায়ী মোট জনবল", "Total personnel under the approved organogram")}</p>
-            <div className="launch-chief">
-              <Image className="chief-photo" src={unit.chief.photo} alt="" width={48} height={48} />
-              <div><small>{t(unit.chief.role.bn, unit.chief.role.en)}</small><strong>{t(unit.chief.rank.bn, unit.chief.rank.en)} {t(unit.chief.name.bn, unit.chief.name.en)}</strong></div>
+            <div className="hero-trust">
+              <span className="trust-item"><Calendar size={16} />{t("যাত্রা শুরু", "Operational since")} {t(unit.launched.bn, unit.launched.en)}</span>
+              <Link href="/about" className="trust-chief">
+                <Image className="chief-photo" src={unit.chief.photo} alt="" width={40} height={40} />
+                <span><small>{t(unit.chief.role.bn, unit.chief.role.en)}</small>{t(unit.chief.rank.bn, unit.chief.rank.en)} {t(unit.chief.name.bn, unit.chief.name.en)}</span>
+              </Link>
             </div>
-          </aside>
+          </div>
+          <DivisionNetwork />
         </div>
       </section>
 
@@ -52,30 +61,22 @@ export default function Home() {
       </section>
 
       <section className="section page-wrap">
-        <div className="section-head">
-          <p className="eyebrow">{t("আমাদের কার্যপরিধি", "OUR MANDATE")}</p>
-          <h2>{t("যেসব অপরাধ দমনে আমরা কাজ করি", "Crimes we work to prevent")}</h2>
-          <p>{t("পরিবর্তনশীল অপরাধের ধরণ ও কৃত্রিম বুদ্ধিমত্তার যুগে আধুনিক প্রযুক্তি ও মেধানির্ভর পুলিশিং।", "Modern, skills-driven policing for changing crime patterns in the age of AI.")}</p>
-        </div>
+        <SectionHead eyebrow={["আমাদের কার্যপরিধি", "Our mandate"]} title={["যেসব অপরাধ দমনে আমরা কাজ করি", "Crimes we work to prevent"]} lede={["পরিবর্তনশীল অপরাধের ধরণ ও কৃত্রিম বুদ্ধিমত্তার যুগে আধুনিক প্রযুক্তি ও মেধানির্ভর পুলিশিং।", "Modern, skills-driven policing for changing crime patterns in the age of AI."]} />
         <div className="mandate-grid">
-          {mandate.map(({ icon: Icon, bn, en }) => <div key={en} className="mandate-item"><Icon size={22} /><span>{t(bn, en)}</span></div>)}
+          {mandate.map(({ icon: Icon, bn, en }, index) => <div key={en} className="mandate-item"><span className="mandate-index">{String(index + 1).padStart(2, "0")}</span><Icon size={24} /><span>{t(bn, en)}</span></div>)}
         </div>
       </section>
 
+      <div className="motif-band" aria-hidden="true" />
       <section className="stats-band">
         <div className="page-wrap stats-grid">
-          <div><strong>{t("৪,৫৯২", "4,592")}</strong><span>{t("অনুমোদিত জনবল", "Approved personnel")}</span></div>
-          <div><strong>{t("৪", "4")}</strong><span>{t("স্তরের সাংগঠনিক কাঠামো", "Tiers of command")}</span></div>
-          <div><strong>{t("১০", "10")}</strong><span>{t("বিশেষায়িত বিশেষজ্ঞ পদ", "Specialist expert roles")}</span></div>
-          <div><strong><FlaskConical size={30} /></strong><span>{t("ডিজিটাল ফরেনসিক ল্যাব স্থাপিত হচ্ছে", "Digital forensics lab being established")}</span></div>
+          {stats.map((stat) => <div key={stat.label}><strong>{stat.value}</strong><span>{stat.label}</span></div>)}
         </div>
       </section>
 
       <section className="section page-wrap help-split">
         <div>
-          <div className="section-head section-head-row">
-            <div><p className="eyebrow">{t("বাংলাদেশে প্রচলিত", "COMMON IN BANGLADESH")}</p><h2>{t("যেসব প্রতারণা সবচেয়ে বেশি ঘটে", "The scams we see most")}</h2></div>
-          </div>
+          <SectionHead eyebrow={["বাংলাদেশে প্রচলিত", "Common in Bangladesh"]} title={["যেসব প্রতারণা সবচেয়ে বেশি ঘটে", "The scams we see most"]} />
           <div className="scam-chips">
             {commonScams.slice(0, 8).map(({ icon: Icon, title }) => <Link key={title.en} href="/awareness#scams" className="specialist-chip"><Icon size={18} /><span>{t(title.bn, title.en)}</span></Link>)}
           </div>
@@ -97,6 +98,33 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section-tint">
+        <div className="section page-wrap">
+          <SectionHead eyebrow={["সাইবার স্বাস্থ্য পরীক্ষা", "Cyber health check"]} title={["আপনি কতটা সুরক্ষিত? ৬০ সেকেন্ডে জেনে নিন", "How safe are you? Find out in 60 seconds"]} lede={["সাতটি সহজ প্রশ্ন — প্রতিটি ‘না’ উত্তরের সঙ্গে পাবেন তাৎক্ষণিক সমাধান।", "Seven quick questions — every ‘no’ comes with an instant fix."]} />
+          <HygieneCheck />
+        </div>
+      </section>
+
+      <section className="section page-wrap">
+        <SectionHead eyebrow={["সাংগঠনিক কাঠামো", "Organisation"]} title={["সদর দপ্তর থেকে থানা পর্যন্ত", "From headquarters to every police station"]} action={<Link className="text-link" href="/about">{t("বিস্তারিত কাঠামো", "Full structure")}<ArrowRight size={17} /></Link>} />
+        <ol className="tier-row">
+          {structure.map(({ icon: Icon, level, lead }, index) => (
+            <li key={level.en}><span className="tier-index">{t(["০১", "০২", "০৩", "০৪"][index], `0${index + 1}`)}</span><Icon size={22} /><strong>{t(level.bn, level.en)}</strong><span>{t(lead.bn, lead.en)}</span></li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="global-band">
+        <div className="section page-wrap">
+          <SectionHead light eyebrow={["বাংলাদেশ থেকে বিশ্বে", "Local reach, global partners"]} title={["সাইবার অপরাধের সীমানা নেই, আমাদের সহযোগিতারও নেই", "Cybercrime has no borders — neither does our cooperation"]} lede={["প্রতারকের সার্ভার বিদেশে, ভুক্তভোগী দেশে — তাই আন্তর্জাতিক সহযোগিতা ও মানদণ্ড তদন্তের অপরিহার্য অংশ।", "The fraudster's server is abroad, the victim is at home — so international cooperation and standards are core to every investigation."]} />
+          <div className="global-grid">
+            {international.map(({ icon: Icon, title, text }) => (
+              <article key={title.en} className="global-card"><Icon size={24} /><h3>{t(title.bn, title.en)}</h3><p>{t(text.bn, text.en)}</p></article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section page-wrap feature-split">
         <article className="news-feature">
           <p className="eyebrow">{t("প্রেস বিজ্ঞপ্তি", "PRESS RELEASE")} · {t(launchArticle.date.bn, launchArticle.date.en)}</p>
@@ -112,26 +140,11 @@ export default function Home() {
 
       <section className="section-tint">
         <div className="section page-wrap">
-          <div className="section-head section-head-row">
-            <div><p className="eyebrow">{t("সাংগঠনিক কাঠামো", "ORGANISATION")}</p><h2>{t("সদর দপ্তর থেকে থানা পর্যন্ত", "From headquarters to every police station")}</h2></div>
-            <Link className="text-link" href="/about">{t("বিস্তারিত কাঠামো", "Full structure")}<ArrowRight size={17} /></Link>
+          <SectionHead eyebrow={["বিশেষজ্ঞ সক্ষমতা", "Specialist capability"]} title={["আন্তর্জাতিক মানের কারিগরি দক্ষতা", "International-standard technical expertise"]} action={<Link className="text-link" href="/careers">{t("নিয়োগ তথ্য", "Career information")}<ArrowRight size={17} /></Link>} />
+          <div className="specialist-grid">
+            {specialists.slice(0, 8).map(({ icon: Icon, bn, en }) => <div key={en} className="specialist-chip"><Icon size={18} /><span>{t(bn, en)}</span></div>)}
+            <Link href="/careers" className="specialist-chip more"><Users size={18} /><span>{t("আরও ২টি পদ", "2 more roles")}</span></Link>
           </div>
-          <ol className="tier-row">
-            {structure.map(({ icon: Icon, level, lead }, index) => (
-              <li key={level.en}><span className="tier-index">{t(["০১", "০২", "০৩", "০৪"][index], `0${index + 1}`)}</span><Icon size={22} /><strong>{t(level.bn, level.en)}</strong><span>{t(lead.bn, lead.en)}</span></li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="section page-wrap">
-        <div className="section-head section-head-row">
-          <div><p className="eyebrow">{t("বিশেষজ্ঞ সক্ষমতা", "SPECIALIST CAPABILITY")}</p><h2>{t("আন্তর্জাতিক মানের কারিগরি দক্ষতা", "International-standard technical expertise")}</h2></div>
-          <Link className="text-link" href="/careers">{t("নিয়োগ তথ্য", "Career information")}<ArrowRight size={17} /></Link>
-        </div>
-        <div className="specialist-grid">
-          {specialists.slice(0, 8).map(({ icon: Icon, bn, en }) => <div key={en} className="specialist-chip"><Icon size={18} /><span>{t(bn, en)}</span></div>)}
-          <Link href="/careers" className="specialist-chip more"><Users size={18} /><span>{t("আরও ২টি পদ", "2 more roles")}</span></Link>
         </div>
       </section>
 

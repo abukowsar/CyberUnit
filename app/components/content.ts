@@ -133,3 +133,27 @@ export const launchArticle = {
     en: "Home Minister Salahuddin Ahmed formally inaugurated the unit at the Hall of Integrity, Police Headquarters.",
   },
 };
+
+/* Cross-border cooperation and standards. Confirm wording with the unit before publishing. */
+export const international: { icon: LucideIcon; title: Bilingual; text: Bilingual }[] = [
+  {
+    icon: Globe,
+    title: { bn: "ইন্টারপোল সহযোগিতা", en: "INTERPOL cooperation" },
+    text: { bn: "সীমান্তপারের সাইবার অপরাধে পুলিশ সদর দপ্তরের ইন্টারপোল ন্যাশনাল সেন্ট্রাল ব্যুরো (এনসিবি ঢাকা)-র মাধ্যমে বিদেশি সংস্থার সঙ্গে তথ্য বিনিময়।", en: "Information exchange with foreign agencies on cross-border cybercrime through INTERPOL's National Central Bureau at Police Headquarters (NCB Dhaka)." },
+  },
+  {
+    icon: Share2,
+    title: { bn: "বৈশ্বিক প্ল্যাটফর্মের সঙ্গে সমন্বয়", en: "Working with global platforms" },
+    text: { bn: "মেটা, গুগল, টিকটকসহ আন্তর্জাতিক প্ল্যাটফর্মের কাছে আইনানুগ প্রক্রিয়ায় তথ্য ও কনটেন্ট অপসারণের অনুরোধ।", en: "Lawful data and content-removal requests to international platforms such as Meta, Google and TikTok." },
+  },
+  {
+    icon: ScanSearch,
+    title: { bn: "আন্তর্জাতিক মানের ডিজিটাল প্রমাণ", en: "Digital evidence to international standards" },
+    text: { bn: "ডিজিটাল প্রমাণ শনাক্ত, সংগ্রহ ও সংরক্ষণে ISO/IEC 27037-এর মতো আন্তর্জাতিক নির্দেশিকা ও চেইন অব কাস্টডি অনুসরণের লক্ষ্য।", en: "Aiming to follow international guidance such as ISO/IEC 27037 and a strict chain of custody when identifying, collecting and preserving digital evidence." },
+  },
+  {
+    icon: ShieldCheck,
+    title: { bn: "দেশে ও বিদেশে প্রশিক্ষণ", en: "Training at home and abroad" },
+    text: { bn: "ইউনিট পরিচালনায় নিয়োজিত সিনিয়র কর্মকর্তাদের জন্য দেশে ও বিদেশে উচ্চতর বিশেষায়িত প্রশিক্ষণের ব্যবস্থা।", en: "Advanced specialist training at home and abroad for senior officers leading the unit." },
+  },
+];

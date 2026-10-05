@@ -3,7 +3,8 @@
 import { Award, BookOpen, FlaskConical, GraduationCap, Mail, Network, Phone, ShieldCheck, Smartphone, Target, UserCheck } from "lucide-react";
 import Image from "next/image";
 import { PageBanner } from "../components/PageBanner";
-import { structure, unit } from "../components/content";
+import { international, structure, unit } from "../components/content";
+import { SectionHead } from "../components/SectionHead";
 import { useSite } from "../components/SiteProvider";
 
 export default function AboutView() {
@@ -108,6 +109,17 @@ export default function AboutView() {
         <div className="section-head"><p className="eyebrow">{t("সক্ষমতা উন্নয়ন", "CAPACITY")}</p><h2>{t("দক্ষ জনবল, আধুনিক প্রশিক্ষণ", "Skilled people, modern training")}</h2></div>
         <div className="capacity-grid">
           {capacity.map(({ icon: Icon, title, text }) => <article key={title} className="capacity-item"><Icon size={22} /><div><h3>{title}</h3><p>{text}</p></div></article>)}
+        </div>
+      </section>
+
+      <section className="global-band">
+        <div className="section page-wrap">
+          <SectionHead light eyebrow={["আন্তর্জাতিক সহযোগিতা", "International cooperation"]} title={["সীমান্তপারের অপরাধে বৈশ্বিক অংশীদারিত্ব", "Global partnership against cross-border crime"]} />
+          <div className="global-grid">
+            {international.map(({ icon: Icon, title, text }) => (
+              <article key={title.en} className="global-card"><Icon size={24} /><h3>{t(title.bn, title.en)}</h3><p>{t(text.bn, text.en)}</p></article>
+            ))}
+          </div>
         </div>
       </section>
     </>
